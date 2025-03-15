@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Cost Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #ee9a9a;
+            margin: 0;
+            background: url("C://Users//VEDANT UPLEKAR//OneDrive//Desktop//project_sem6//Medical-insurance-price-prediction//frontend") no-repeat center center;
+            background-size: cover;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 350px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #007BFF;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background: #0056b3; }
+        #result { font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Medical Insurance Cost Predicton</h2>
+        <form id="predictForm">
+            <input type="number" id="age" placeholder="Age" required>
+            <input type="number" id="bmi" placeholder="BMI" required>
+            <input type="number" id="children" placeholder="Children" required>
+            <select id="smoker" required>
+                <option value="" disabled selected>Smoker?</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            <button type="submit">Predict</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById("predictForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const data = {
+                age: +document.getElementById("age").value,
+                bmi: +document.getElementById("bmi").value,
+                children: +document.getElementById("children").value,
+                smoker: document.getElementById("smoker").value
+            };
+
+            try {
+                const res = await fetch("http://127.0.0.1:5000/predict", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                document.getElementById("result").innerHTML = result.error 
+                    ? `<span style="color: red;">Error: ${result.error}</span>` 
+                    : `<span style="color: green;">Predicted Cost: ${result.predicted_cost}</span>`;
+            } catch {
+                document.getElementById("result").innerHTML = `<span style="color: red;">Error: API connection failed.</span>`;
+            }
+        });
+    </script>
+
+</body>
+</html>
