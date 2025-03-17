@@ -1,4 +1,5 @@
 import os
+import pickle
 import numpy as np
 from flask import Flask, request, jsonify
 
@@ -11,7 +12,7 @@ CORS(app)  # Enable CORS for all routes
 
 file_path = os.path.join(os.path.dirname(__file__), "insurancemodelf.pkl")
 with open(file_path, "rb") as file:
-    model = file.read()
+    model = pickle.load(file)  
     
     
 @app.route('/')
