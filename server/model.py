@@ -1,4 +1,4 @@
-import pickle
+import os
 import numpy as np
 from flask import Flask, request, jsonify
 
@@ -8,10 +8,12 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
 # Load the trained model
-with open(r"insurancemodelf.pkl", "rb") as file:
-    model = pickle.load(file)
-    print('model', model)
 
+file_path = os.path.join(os.path.dirname(__file__), "insurancemodelf.pkl")
+with open(file_path, "rb") as file:
+    model = file.read()
+    
+    
 @app.route('/')
 def home():
     return "Medical Insurance Cost Prediction API is running!"
